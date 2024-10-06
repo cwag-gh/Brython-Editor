@@ -62,8 +62,12 @@ function get_html(page) {
         + '</head>\n'
         + '<body onload="brython(1)">\n'
     html += html_editor.getValue() + '\n'
-    html += '<script type="text/python">\n'
 
+    /* Add in an error handler in a separate script block, so reported errors
+       not sent to the system console, and line numbers in the actual script are
+       maintained.  For some reason, this does not handle syntax errors.
+    */
+    html += '<script type="text/python">\n'
     html += 'from browser import document\n'
     html += 'import sys\n'
     html += 'class __ErrorReporter:\n'
@@ -75,10 +79,15 @@ function get_html(page) {
     html += '            self.errdiv.style = "white-space: pre-wrap; font-family: monospace; color:red"\n'
     html += '            document.body.insertBefore(self.errdiv, document.body.firstChild)\n'
     html += '        self.errdiv.textContent += ("\\n" + msg)\n'
+    html += '    def flush(self, msg):\n'
     html += 'sys.stderr = __ErrorReporter()\n'
+    html += 'sys.stdout = sys.stderr\n'
+    html += '</script>\n'
 
+    html += '<script type="text/python">\n'
     html += python_editor.getValue() + '\n'
     html += '</script>\n'
+
     if (page) {
         html += '<script> brython(1) </script>'
     }
