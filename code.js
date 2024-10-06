@@ -57,17 +57,30 @@ function get_html(page) {
         + '<html>\n'
         + '<head>\n'
         + '<meta charset="utf-8">\n'
-        + '<script type="text/javascript" src="https://raw.githack.com/brython-dev/brython/master/www/src/brython.js"></script>\n'
-        + '<script type="text/javascript" src="https://raw.githack.com/brython-dev/brython/master/www/src/brython_stdlib.js"></script>\n'
-        + '</head>\n'
-        + '<body onload="brython(1)">\n'
+        + '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.12.4/brython.min.js"></script>\n'
+        + '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.12.4/brython_stdlib.min.js"></script>\n'
+
+    /* Add in a helper function that runs brython on our first script completely first,
+       so that our error handler is ready to report syntax errors on the second script
+       block. */
+    html += '<script type="text/javascript">\n'
+    html += 'function __brython_pre_then_code() {\n'
+    html += '  brython({debug:1, ids:["brythonpre"]});\n'
+    html += '  setTimeout(function (){\n'
+    html += '     brython({debug:1, ids:["pythoncode"]});\n'
+    html += '     }, 10);\n'
+    html += '}\n'
+    html += '</script>\n'
+    html += '</head>\n'
+    html += '<body onload=__brython_pre_then_code()>\n'
+
     html += html_editor.getValue() + '\n'
 
-    /* Add in an error handler in a separate script block, so reported errors
+    /* Specify the error handler in a separate script block, so reported errors
        not sent to the system console, and line numbers in the actual script are
        maintained.  For some reason, this does not handle syntax errors.
     */
-    html += '<script type="text/python">\n'
+    html += '<script type="text/python" id="brythonpre">\n'
     html += 'from browser import document\n'
     html += 'import sys\n'
     html += 'class __ErrorReporter:\n'
@@ -79,17 +92,15 @@ function get_html(page) {
     html += '            self.errdiv.style = "white-space: pre-wrap; font-family: monospace; color:red"\n'
     html += '            document.body.insertBefore(self.errdiv, document.body.firstChild)\n'
     html += '        self.errdiv.textContent += ("\\n" + msg)\n'
-    html += '    def flush(self, msg):\n'
     html += 'sys.stderr = __ErrorReporter()\n'
-    html += 'sys.stdout = sys.stderr\n'
     html += '</script>\n'
 
-    html += '<script type="text/python">\n'
+    html += '<script type="text/python" id="pythoncode">\n'
     html += python_editor.getValue() + '\n'
     html += '</script>\n'
 
     if (page) {
-        html += '<script> brython(1) </script>'
+        html += '<script> __brython_pre_then_code() </script>'
     }
     html += '</body>\n</html>\n'
     return html
