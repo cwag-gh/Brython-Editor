@@ -1,42 +1,34 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+  <style>
+      body {
+          color: rgb(248, 248, 242);
+          background-color: rgb(39, 40, 34);
+      }
 
-    <head>
-        <style>
-            body {
-                color: rgb(248, 248, 242);
-                background-color: rgb(39, 40, 34);
-            }
+      .row {
+          display: flex;
+      }
 
-            .row {
-                display: flex;
-            }
+      .column {
+          flex: 50%;
+      }
 
-            .column {
-                flex: 50%;
-            }
+      .toolbar {
+          height: 20px;
+      }
 
-            .head {
-                height: 50px;
-            }
+      .content {
+          height: calc(100vh - 20px - 10px - 10px);
+          overflow-y: scroll;
+          border: 1px solid grey;
+      }
 
-            .toolbar {
-                height: 20px;
-            }
-
-            .content {
-                height: calc(100vh - 20px - 50px - 40px - 20px);
-                overflow-y: scroll;
-                border: 1px solid grey;
-            }
-
-            .tail {
-                height: 20px;
-            }
-        </style>
-
+      .tail {
+          height: 20px;
+      }
+  </style>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"></link>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/monokai.min.css"></link>
@@ -45,19 +37,13 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/python/python.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/xml/xml.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/comment/comment.min.js"></script>
-    </head>
 </head>
 
 <body>
-    <div class="head">
-        <h1> Brython Online Editor
-        </h1>
-    </div>
-
     <div class="row">
         <div class="column toolbar">
             Body Html
-            
+
             <button id="inputfile"> Open </button>
             <text id="filename"></text>
             <button id="save" onClick='save_to_file()'> Save </button>
@@ -68,6 +54,9 @@
             Python
             <button style="float: right;" onclick="window.open('https://github.com/urfdvw/Brython-Editor')">
                 IDE Help
+            </button>
+            <button style="float: right;" onclick="window.open('https://www.brython.info/index.html')">
+              Brython Help
             </button>
         </div>
     </div>
@@ -81,14 +70,6 @@
             </div>
         </div>
     </div>
-    <div class="tail">
-        Reference:
-        <button onclick="window.open('https://www.brython.info/index.html')">
-            Brython Website
-        </button>
-
-    </div>
-
     <script type="text/javascript" src="code.js">
     </script>
 </body>
