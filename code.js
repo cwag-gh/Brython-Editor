@@ -63,6 +63,20 @@ function get_html(page) {
         + '<body onload="brython(1)">\n'
     html += html_editor.getValue() + '\n'
     html += '<script type="text/python">\n'
+
+    html += 'from browser import document\n'
+    html += 'import sys\n'
+    html += 'class __ErrorReporter:\n'
+    html += '    def __init__(self):\n'
+    html += '        self.errdiv = None\n'
+    html += '    def write(self, msg):\n'
+    html += '        if self.errdiv is None:\n'
+    html += '            self.errdiv = document.createElement("div")\n'
+    html += '            self.errdiv.style = "white-space: pre-wrap; font-family: monospace;"\n'
+    html += '            document.body.insertBefore(self.errdiv, document.body.firstChild)\n'
+    html += '        self.errdiv.textContent += ("\\n" + msg)\n'
+    html += 'sys.stderr = __ErrorReporter()\n'
+
     html += python_editor.getValue() + '\n'
     html += '</script>\n'
     if (page) {
