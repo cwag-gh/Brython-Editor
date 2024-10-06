@@ -72,7 +72,7 @@ function get_html(page) {
     html += '    def write(self, msg):\n'
     html += '        if self.errdiv is None:\n'
     html += '            self.errdiv = document.createElement("div")\n'
-    html += '            self.errdiv.style = "white-space: pre-wrap; font-family: monospace;"\n'
+    html += '            self.errdiv.style = "white-space: pre-wrap; font-family: monospace; color:red"\n'
     html += '            document.body.insertBefore(self.errdiv, document.body.firstChild)\n'
     html += '        self.errdiv.textContent += ("\\n" + msg)\n'
     html += 'sys.stderr = __ErrorReporter()\n'
