@@ -72,7 +72,7 @@ function get_html(page) {
     html += '}\n'
     html += '</script>\n'
     html += '</head>\n'
-    html += '<body onload=__brython_pre_then_code()>\n'
+    html += '<body onload="__brython_pre_then_code()">\n'
 
     html += html_editor.getValue() + '\n'
 
@@ -129,14 +129,18 @@ function run_app_page() {
 let fileHandle;
 var butOpenFile = document.getElementById("inputfile")
 butOpenFile.addEventListener('click', async () => {
-        [fileHandle] = await window.showOpenFilePicker();
-        const file = await fileHandle.getFile();
-        const contents = await file.text();
-        // console.log(contents)
-        html_editor.setValue(contents.split('<body onload="brython(1)">')[1].split('<script type="text/python">')[0].trim())
-        python_editor.setValue(contents.split('<script type="text/python">')[1].split('</script>')[0].trim())
-        document.getElementById('filename').innerHTML = fileHandle.name;
-        document.title = fileHandle.name
+    [fileHandle] = await window.showOpenFilePicker();
+    const file = await fileHandle.getFile();
+    const contents = await file.text();
+    // console.log(contents)
+    var body_and_script = contents.split('<body onload="__brython_pre_then_code()">')[1]
+    var body = body_and_script.split('<script type="text/python" id="brythonpre">')[0].trim()
+    html_editor.setValue(body)
+    var script_and_foot = body_and_script.split('<script type="text/python" id="pythoncode">')[1]
+    var script = script_and_foot.split('</script>')[0].trim()
+    python_editor.setValue(script)
+    document.getElementById('filename').innerHTML = fileHandle.name;
+    document.title = fileHandle.name
 });
 
 async function writeFile(fileHandle, contents) {
